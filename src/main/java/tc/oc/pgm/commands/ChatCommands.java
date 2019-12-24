@@ -13,6 +13,7 @@ import tc.oc.component.Component;
 import tc.oc.component.types.PersonalizedPlayer;
 import tc.oc.component.types.PersonalizedText;
 import tc.oc.named.NameStyle;
+import tc.oc.pgm.AllTranslations;
 import tc.oc.pgm.api.PGM;
 import tc.oc.pgm.api.Permissions;
 import tc.oc.pgm.api.chat.Audience;
@@ -105,6 +106,19 @@ public class ChatCommands {
     }
 
     direct(sender, receiver.getBukkit(), message);
+  }
+
+  public static void sendNeutralRaw(String message, Predicate<Player> viewerFilter) {
+    for (Player player : Bukkit.getOnlinePlayers().stream().filter(viewerFilter).collect(Collectors.toSet())) {
+      player.sendMessage(message);
+    }
+  }
+
+  public static void sendNeutralTranslated(String message, Predicate<Player> viewerFilter, Object... args) {
+    for (Player player : Bukkit.getOnlinePlayers().stream().filter(viewerFilter).collect(Collectors.toSet())) {
+      String derivedMessage = AllTranslations.get().translate(message, player, args);
+      player.sendMessage(derivedMessage);
+    }
   }
 
   // FIXME: commands will crash when used as console, need to change provider logic

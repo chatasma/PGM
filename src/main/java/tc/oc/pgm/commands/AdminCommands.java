@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.joda.time.Duration;
 import tc.oc.pgm.AllTranslations;
 import tc.oc.pgm.api.PGM;
@@ -19,6 +20,7 @@ import tc.oc.pgm.api.Permissions;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.match.MatchManager;
 import tc.oc.pgm.api.party.Competitor;
+import tc.oc.pgm.freeze.FreezeManager;
 import tc.oc.pgm.map.PGMMap;
 import tc.oc.pgm.restart.RestartManager;
 import tc.oc.pgm.start.StartMatchModule;
@@ -182,6 +184,22 @@ public class AdminCommands {
     PGM.get().reloadConfig();
     sender.sendMessage(
         ChatColor.GREEN + AllTranslations.get().translate("command.admin.pgm", sender));
+  }
+
+
+  @Command(aliases = {"freeze"}, desc = "Freeze a player", perms = Permissions.FREEZE)
+  public void freeze(CommandSender sender, @Nullable Player target) {
+    FreezeManager freezeManager = FreezeManager.get();
+    Player playerSender = (sender instanceof Player) ? (Player) sender : null;
+    if (target == null) {
+      if (playerSender == null) {
+        sender.sendMessage(ChatColor.RED + AllTranslations.get().translate("command.freeze.mustBePlayer", sender));
+        return;
+      }
+      freezeManager.setFreezeMode(playerSender, !freezeManager.getFreezeModeOfPlayer(playerSender));
+    } else {
+      freezeManager.toggleFreeze(playerSender, target);
+    }
   }
 
   private static Map<String, Competitor> getCompetitorMap(CommandSender sender, Match match) {
