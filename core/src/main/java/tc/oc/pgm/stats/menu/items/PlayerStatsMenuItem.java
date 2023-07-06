@@ -6,6 +6,7 @@ import static tc.oc.pgm.stats.StatsMatchModule.damageComponent;
 import static tc.oc.pgm.util.player.PlayerComponent.player;
 import static tc.oc.pgm.util.text.NumberComponent.number;
 
+import com.cryptomorin.xseries.XMaterial;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +124,7 @@ public class PlayerStatsMenuItem implements MenuItem {
 
   @Override
   public Material getMaterial(Player player) {
-    return Material.SKULL_ITEM;
+    return XMaterial.PLAYER_HEAD.parseMaterial();
   }
 
   @Override
