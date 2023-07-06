@@ -107,6 +107,7 @@ public interface Refl {
 
     @Reflect.Method("a_")
     @Reflect.Method("c_")
+    @Reflect.Method("asString")
     String getString(Object item);
   };
 

@@ -22,6 +22,8 @@ import tc.oc.pgm.hologram.Hologram;
 import tc.oc.pgm.hologram.HologramMatchModule;
 import tc.oc.pgm.util.block.BlockStates;
 import tc.oc.pgm.util.material.Materials;
+import tc.oc.pgm.util.nms.material.Banner;
+import tc.oc.pgm.util.nms.material.MaterialDataProvider;
 
 /** Base class for flag states in which the banner is placed on the ground somewhere as a block */
 public abstract class Uncarried extends Spawned {
@@ -45,7 +47,7 @@ public abstract class Uncarried extends Spawned {
             location.getPitch());
 
     Block block = this.location.getBlock();
-    if (block.getType() == Material.STANDING_BANNER) {
+    if (MaterialDataProvider.from(block) instanceof Banner) {
       // Banner may already be here at match start
       this.oldBlock = BlockStates.cloneWithMaterial(block, Material.AIR);
     } else {
