@@ -1,7 +1,6 @@
 package tc.oc.pgm.util.material;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
@@ -10,8 +9,9 @@ import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 import tc.oc.pgm.util.block.BlockFaces;
+import tc.oc.pgm.util.nms.material.MaterialData;
+import tc.oc.pgm.util.nms.material.MaterialDataProvider;
 
 public interface Materials {
 
@@ -135,35 +135,23 @@ public interface Materials {
   }
 
   static boolean isSolid(MaterialData material) {
-    return isSolid(material.getItemType());
+    return isSolid(material.getMaterial());
   }
 
   static boolean isSolid(BlockState block) {
-    return isSolid(block.getType());
+    return isSolid(block.getMaterial());
   }
 
   static boolean isWater(Material material) {
     return material == Material.WATER || material == Material.STATIONARY_WATER;
   }
 
-  static boolean isWater(MaterialData material) {
-    return isWater(material.getItemType());
-  }
-
   static boolean isWater(Location location) {
     return isWater(location.getBlock().getType());
   }
 
-  static boolean isWater(BlockState block) {
-    return isWater(block.getType());
-  }
-
   static boolean isLava(Material material) {
     return material == Material.LAVA || material == Material.STATIONARY_LAVA;
-  }
-
-  static boolean isLava(MaterialData material) {
-    return isLava(material.getItemType());
   }
 
   static boolean isLava(Location location) {
@@ -217,11 +205,6 @@ public interface Materials {
     }
   }
 
-  static Material materialAt(Location location) {
-    Block block = location.getBlock();
-    return block == null ? Material.AIR : block.getType();
-  }
-
   static BannerMeta getItemMeta(Banner block) {
     BannerMeta meta = (BannerMeta) Bukkit.getItemFactory().getItemMeta(Material.BANNER);
     meta.setBaseColor(block.getBaseColor());
@@ -243,10 +226,13 @@ public interface Materials {
       Banner banner = (Banner) block.getState();
       applyToBlock(banner, meta);
 
-      org.bukkit.material.Banner material = (org.bukkit.material.Banner) banner.getData();
-      material.setFacingDirection(BlockFaces.yawToFace(location.getYaw()));
-      banner.setData(material);
+      MaterialData material = MaterialDataProvider.from(banner);
+      tc.oc.pgm.util.nms.material.Banner bannerMaterial =
+          (tc.oc.pgm.util.nms.material.Banner) material;
+      bannerMaterial.setFacingDirection(BlockFaces.yawToFace(location.getYaw()));
+      material.apply(banner);
       banner.update(true, false);
+
       return true;
     }
     return false;
@@ -254,15 +240,10 @@ public interface Materials {
 
   static Location getLocationWithYaw(Banner block) {
     Location location = block.getLocation();
-    location.setYaw(
-        BlockFaces.faceToYaw(((org.bukkit.material.Banner) block.getData()).getFacing()));
+    MaterialData material = MaterialDataProvider.from(block);
+    tc.oc.pgm.util.nms.material.Banner bannerMaterial =
+        (tc.oc.pgm.util.nms.material.Banner) material;
+    location.setYaw(BlockFaces.faceToYaw(bannerMaterial.getFacingDirection()));
     return location;
-  }
-
-  static void playBreakEffect(Location location, MaterialData material) {
-    location
-        .getWorld()
-        .playEffect(
-            location, Effect.STEP_SOUND, material.getItemTypeId() + (material.getData() << 12));
   }
 }
