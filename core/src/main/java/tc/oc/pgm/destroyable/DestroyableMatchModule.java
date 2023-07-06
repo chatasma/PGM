@@ -12,7 +12,6 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.material.MaterialData;
 import tc.oc.pgm.api.event.BlockTransformEvent;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.match.MatchModule;
@@ -109,7 +108,6 @@ public class DestroyableMatchModule implements MatchModule, Listener {
     if (this.match.getWorld() != event.getBlock().getWorld()) return;
 
     Block block = event.getBlock();
-    MaterialData material = block.getState().getData();
     MatchPlayer player = this.match.getPlayer(event.getPlayer());
 
     for (Destroyable destroyable : this.destroyables) {
@@ -117,7 +115,7 @@ public class DestroyableMatchModule implements MatchModule, Listener {
           && player.getParty() == destroyable.getOwner()
           && !destroyable.isDestroyed()
           && destroyable.getBlockRegion().contains(block)
-          && destroyable.hasMaterial(material)) {
+          && destroyable.hasMaterial(block)) {
 
         event.setCancelled(true);
         player.sendWarning(translatable("objective.damageOwn", destroyable.getComponentName()));

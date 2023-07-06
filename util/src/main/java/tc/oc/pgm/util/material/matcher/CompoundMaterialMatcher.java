@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 import org.jetbrains.annotations.Nullable;
 import tc.oc.pgm.util.material.MaterialMatcher;
+import tc.oc.pgm.util.nms.material.MaterialData;
 
 public class CompoundMaterialMatcher implements MaterialMatcher {
 
@@ -42,6 +44,22 @@ public class CompoundMaterialMatcher implements MaterialMatcher {
   public boolean matches(ItemStack stack) {
     for (MaterialMatcher child : children) {
       if (child.matches(stack)) return true;
+    }
+    return false;
+  }
+
+  @Override
+  public boolean matches(Block block) {
+    for (MaterialMatcher child : children) {
+      if (child.matches(block)) return true;
+    }
+    return false;
+  }
+
+  @Override
+  public boolean matches(BlockState blockState) {
+    for (MaterialMatcher child : children) {
+      if (child.matches(blockState)) return true;
     }
     return false;
   }
