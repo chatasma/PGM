@@ -120,20 +120,8 @@ public class Payload extends ControlPoint {
 
     if (definition.showBeam()) {
       DyeColor dyeColor = display != null ? display.getDyeColor() : DyeColor.WHITE;
-      match
-          .getWorld()
-          .spigot()
-          .playEffect(
-              position.toLocation(match.getWorld()).clone().add(0, 56, 0),
-              Effect.TILE_DUST,
-              Material.WOOL.getId(),
-              dyeColor.getWoolData(),
-              0.15f, // radius on each axis of the particle ball
-              24f,
-              0.15f,
-              0f, // initial horizontal velocity
-              40, // number of particles
-              200); // radius in blocks to show particles
+      NMSHacks.spawnPayloadBeamParticles(
+          matchWorld, position.toLocation(match.getWorld()).clone().add(0, 56, 0), dyeColor);
     }
   }
 

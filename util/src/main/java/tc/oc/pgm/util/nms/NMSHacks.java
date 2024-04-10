@@ -472,6 +472,10 @@ public interface NMSHacks {
     INSTANCE.spawnPayloadParticles(world, loc, color);
   }
 
+  static void spawnPayloadBeamParticles(World world, Location loc, DyeColor color) {
+    INSTANCE.spawnPayloadBeamParticles(world, loc, color);
+  }
+
   static void showExplosionParticle(Location explosion, Player playerBukkit) {
     INSTANCE.showExplosionParticle(explosion, playerBukkit);
   }

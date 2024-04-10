@@ -15,18 +15,33 @@ import tc.oc.pgm.util.nms.v1_10_12.NMSHacks1_10_12;
 import tc.oc.pgm.util.nms.v1_8.NMSHacks1_8;
 import tc.oc.pgm.util.nms.v1_8.NMSHacksSportPaper;
 import tc.oc.pgm.util.nms.v1_9.NMSHacks1_9;
+import tc.oc.pgm.util.reflect.ReflectionUtils;
 
 public enum Platform {
-  UNKNOWN("UNKNOWN", "UNKNOWN","UNKNOWN", () -> NMSHacksNoOp.class, false),
-  SPORTPAPER_1_8("SportPaper", "1.8","1.8", () -> NMSHacksSportPaper.class, false),
-  SPIGOT_1_8( "Spigot", "1.8","1.8", () -> NMSHacks1_8.class, false),
-  PAPER_1_8( "Paper", "1.8","1.8", () -> NMSHacks1_8.class, false),
+  UNKNOWN("UNKNOWN", "UNKNOWN", "UNKNOWN", () -> NMSHacksNoOp.class, false),
+  SPORTPAPER_1_8("SportPaper", "1.8", "1.8", () -> NMSHacksSportPaper.class, false),
+  SPIGOT_1_8("Spigot", "1.8", "1.8", () -> NMSHacks1_8.class, false),
+  PAPER_1_8("Paper", "1.8", "1.8", () -> NMSHacks1_8.class, false),
   SPIGOT_1_9("Spigot", "1.9", "1.9", () -> NMSHacks1_9.class, true),
-  PAPER_1_9("Paper", "1.9","1.9", () -> NMSHacks1_9.class, true),
-  SPIGOT_1_10_12("Spigot", "1.10","1.12", () -> NMSHacks1_10_12.class, true),
-  PAPER_1_10_12("Paper", "1.10","1.12", () -> NMSHacks1_10_12.class, true),
-  SPIGOT_1_13( "Spigot", "1.13","1.13", () -> NMSHacks1_13.class, true),
-  PAPER_1_13( "Paper", "1.13","1.13", NMSHacks1_13.class, true);
+  PAPER_1_9("Paper", "1.9", "1.9", () -> NMSHacks1_9.class, true),
+  SPIGOT_1_10_12("Spigot", "1.10", "1.12", () -> NMSHacks1_10_12.class, true),
+  PAPER_1_10_12("Paper", "1.10", "1.12", () -> NMSHacks1_10_12.class, true),
+  SPIGOT_1_13(
+      "Spigot",
+      "1.13",
+      "1.13",
+      () ->
+          (Class<? extends NMSHacksPlatform>)
+              ReflectionUtils.getClassFromName("tc.oc.pgm.platform.v1_13.nms.NMSHacks1_13"),
+      true),
+  PAPER_1_13(
+      "Paper",
+      "1.13",
+      "1.13",
+      () ->
+          (Class<? extends NMSHacksPlatform>)
+              ReflectionUtils.getClassFromName("tc.oc.pgm.platform.v1_13.nms.NMSHacks1_13"),
+      true);
 
   private static ClassLogger logger = ClassLogger.get(Platform.class);;
   public static Platform SERVER_PLATFORM = computeServerPlatform();

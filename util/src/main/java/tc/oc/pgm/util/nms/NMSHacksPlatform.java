@@ -225,6 +225,8 @@ public interface NMSHacksPlatform {
 
   void spawnPayloadParticles(World world, Location loc, Color color);
 
+  void spawnPayloadBeamParticles(World world, Location loc, DyeColor color);
+
   void showExplosionParticle(Location explosion, Player playerBukkit);
 
   void spawnSpawnerParticles(World world, Location location);

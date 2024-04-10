@@ -379,6 +379,23 @@ public abstract class NMSHacksNoOp implements NMSHacksPlatform {
   }
 
   @Override
+  public void spawnPayloadBeamParticles(World world, Location loc, DyeColor color) {
+    world
+        .spigot()
+        .playEffect(
+            loc,
+            Effect.TILE_DUST,
+            Material.WOOL.getId(),
+            color.getWoolData(),
+            0.15f,
+            24f,
+            0.15f,
+            0.0f,
+            40,
+            200);
+  }
+
+  @Override
   public void showExplosionParticle(Location explosion, Player playerBukkit) {
     playerBukkit
         .spigot()
