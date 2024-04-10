@@ -1,8 +1,8 @@
 package tc.oc.pgm.util.listener;
 
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
@@ -44,7 +44,7 @@ public class TNTMinecartPlacementListener implements Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onInteraction(PlayerInteractEvent event) {
     ItemStack stack = event.getItem();
-    if (stack != null && stack.getType() == Material.EXPLOSIVE_MINECART) {
+    if (stack != null && stack.getType() == XMaterial.TNT_MINECART.parseMaterial()) {
       lastPlacer = event.getPlayer();
       placingStack = stack.clone();
       railLocation = event.getClickedBlock().getLocation();

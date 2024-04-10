@@ -15,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
@@ -197,6 +198,11 @@ public class NMSHacks1_13 extends NMSHacks1_10_12 {
     packet.getSpecificModifier(Collection.class).write(0, players);
 
     return packet;
+  }
+
+  @Override
+  public Material getMaterialFromBlockState(BlockState blockState) {
+    return blockState.getType();
   }
 
   private Material woolFromDyeColor(final DyeColor dyeColor) {

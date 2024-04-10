@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Firework;
@@ -478,5 +479,9 @@ public interface NMSHacks {
 
   static MaterialDataProviderPlatform getMaterialDataProvider() {
     return INSTANCE.getMaterialDataProvider();
+  }
+
+  static Material getMaterialFromBlockState(BlockState blockState) {
+    return INSTANCE.getMaterialFromBlockState(blockState);
   }
 }

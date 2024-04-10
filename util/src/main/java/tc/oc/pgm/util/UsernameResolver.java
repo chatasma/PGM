@@ -25,7 +25,6 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
-import tc.oc.pgm.util.bukkit.BukkitUtils;
 
 /**
  * Utility to resolve Minecraft usernames from an external API.
@@ -41,15 +40,8 @@ public final class UsernameResolver {
   private static final double MAX_SEQUENTIAL_FAILURES = 5;
   private static String userAgent = "PGM";
 
-  static {
-    try {
-      final Plugin plugin = BukkitUtils.getPlugin();
-      if (plugin != null) {
-        userAgent = plugin.getDescription().getFullName();
-      }
-    } catch (Throwable t) {
-      // No-op, just to be safe in-case agent cannot be found
-    }
+  public static void initializeUserAgent(final Plugin plugin) {
+    userAgent = plugin.getDescription().getFullName();
   }
 
   /**
