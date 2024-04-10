@@ -81,10 +81,6 @@ public class SingleMaterialMatcher implements MaterialMatcher {
 
   @Override
   public String toString() {
-    return "SingleMaterialMatcher{"
-        + "material="
-        + material
-        + (dataMatters ? ", data=" + data : "")
-        + '}';
+    return "SingleMaterialMatcher{" + "materialData=" + materialData + '}';
   }
 }

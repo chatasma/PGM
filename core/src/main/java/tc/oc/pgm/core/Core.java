@@ -76,18 +76,18 @@ public class Core extends TouchableGoal<CoreFactory>
           .warning("No casing world (" + this.material + ") found in core " + this.getName());
     }
 
-    boolean hasStationaryLava = MinecraftReflectionUtils.MINECRAFT_VERSION.lessThanOrEqualTo(
-        NBTEditor.MinecraftVersion.v1_12);
+    boolean hasStationaryLava =
+        MinecraftReflectionUtils.MINECRAFT_VERSION.lessThanOrEqualTo(
+            NBTEditor.MinecraftVersion.v1_12);
     this.lavaRegion =
-      FiniteBlockRegion.fromWorld(
-        region, match.getWorld(),
-        MaterialMatcher.of(
-          hasStationaryLava
-            ? ImmutableList.of(Material.LAVA, Material.STATIONARY_LAVA)
-            : ImmutableList.of(Material.LAVA)
-        ),
-        match.getMap().getProto()
-      );
+        FiniteBlockRegion.fromWorld(
+            region,
+            match.getWorld(),
+            MaterialMatcher.of(
+                hasStationaryLava
+                    ? ImmutableList.of(Material.LAVA, Material.STATIONARY_LAVA)
+                    : ImmutableList.of(Material.LAVA)),
+            match.getMap().getProto());
     if (this.lavaRegion.getBlockVolume() == 0) {
       match.getLogger().warning("No lava found in core " + this.getName());
     }

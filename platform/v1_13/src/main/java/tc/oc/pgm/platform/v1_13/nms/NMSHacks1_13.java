@@ -5,7 +5,6 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -83,14 +82,9 @@ public class NMSHacks1_13 extends NMSHacks1_10_12 {
     return new NullChunkGenerator();
   }
 
-  static Map<DyeColor, Material> dyeColorMaterialMap = new HashMap<>();
-
   @Override
   public void spawnFlagParticles(Player bukkitPlayer, DyeColor dyeColor, Location location) {
-    BlockData blockData =
-        dyeColorMaterialMap
-            .computeIfAbsent(dyeColor, (color -> Material.valueOf(color.name() + "_WOOL")))
-            .createBlockData();
+    BlockData blockData = woolFromDyeColor(dyeColor).createBlockData();
     bukkitPlayer.spawnParticle(
         Particle.BLOCK_DUST, location.clone().add(0, 56, 0), 50, 0.05f, 24f, 0.05f, 0f, blockData);
   }
@@ -110,6 +104,19 @@ public class NMSHacks1_13 extends NMSHacks1_10_12 {
   @Override
   public void spawnPayloadParticles(World world, Location loc, Color color) {
     world.spawnParticle(Particle.REDSTONE, loc, 1, new Particle.DustOptions(color, 1));
+  }
+
+  @Override
+  public void spawnPayloadBeamParticles(World world, Location loc, DyeColor color) {
+    world.spawnParticle(
+        Particle.BLOCK_DUST,
+        loc,
+        40,
+        0.15,
+        24.0,
+        0.15,
+        0.0,
+        woolFromDyeColor(color).createBlockData());
   }
 
   @Override
@@ -190,5 +197,44 @@ public class NMSHacks1_13 extends NMSHacks1_10_12 {
     packet.getSpecificModifier(Collection.class).write(0, players);
 
     return packet;
+  }
+
+  private Material woolFromDyeColor(final DyeColor dyeColor) {
+    switch (dyeColor) {
+      case WHITE:
+        return Material.WHITE_WOOL;
+      case ORANGE:
+        return Material.ORANGE_WOOL;
+      case MAGENTA:
+        return Material.MAGENTA_WOOL;
+      case LIGHT_BLUE:
+        return Material.LIGHT_BLUE_WOOL;
+      case YELLOW:
+        return Material.YELLOW_WOOL;
+      case LIME:
+        return Material.LIME_WOOL;
+      case PINK:
+        return Material.PINK_WOOL;
+      case GRAY:
+        return Material.GRAY_WOOL;
+      case LIGHT_GRAY:
+        return Material.LIGHT_GRAY_WOOL;
+      case CYAN:
+        return Material.CYAN_WOOL;
+      case PURPLE:
+        return Material.PURPLE_WOOL;
+      case BLUE:
+        return Material.BLUE_WOOL;
+      case BROWN:
+        return Material.BROWN_WOOL;
+      case GREEN:
+        return Material.GREEN_WOOL;
+      case RED:
+        return Material.RED_WOOL;
+      case BLACK:
+        return Material.BLACK_WOOL;
+      default:
+        return Material.WHITE_WOOL;
+    }
   }
 }

@@ -218,7 +218,9 @@ public class WoolMatchModule implements MatchModule, Listener {
     if (holder instanceof Player) {
       MatchPlayer playerHolder = this.match.getPlayer((Player) holder);
 
-      if (playerHolder != null && result != null && MaterialDataProvider.from(result) instanceof Wool) {
+      if (playerHolder != null
+          && result != null
+          && MaterialDataProvider.from(result) instanceof Wool) {
         for (MonumentWool wool : this.wools.values()) {
           if (wool.getDefinition().isObjectiveWool(result)) {
             if (!wool.getDefinition().isCraftable()) {
