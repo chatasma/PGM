@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import tc.oc.pgm.util.block.BlockFaces;
+import tc.oc.pgm.util.nms.NMSHacks;
 import tc.oc.pgm.util.nms.material.MaterialData;
 import tc.oc.pgm.util.nms.material.MaterialDataProvider;
 import tc.oc.pgm.util.reflect.MinecraftReflectionUtils;
@@ -133,7 +134,7 @@ public interface Materials {
   }
 
   static boolean isSolid(BlockState block) {
-    return isSolid(block.getMaterial());
+    return isSolid(NMSHacks.getMaterialFromBlockState(block));
   }
 
   static boolean isWater(Material material) {

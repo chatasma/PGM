@@ -46,9 +46,6 @@ import tc.oc.pgm.util.reflect.MinecraftReflectionUtils;
 public class Core extends TouchableGoal<CoreFactory>
     implements IncrementalGoal<CoreFactory>, ModeChangeGoal<CoreFactory> {
 
-  private static final MaterialMatcher LAVA_BLOCKS =
-      MaterialMatcher.of(Material.LAVA, Material.STATIONARY_LAVA);
-
   protected final FiniteBlockRegion casingRegion;
   protected final FiniteBlockRegion lavaRegion;
   protected final Region leakRegion;

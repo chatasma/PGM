@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -410,5 +411,10 @@ public abstract class NMSHacksNoOp implements NMSHacksPlatform {
   @Override
   public MaterialDataProviderPlatform getMaterialDataProvider() {
     return new MaterialDataProviderLegacy();
+  }
+
+  @Override
+  public Material getMaterialFromBlockState(BlockState blockState) {
+    return blockState.getMaterial();
   }
 }

@@ -67,6 +67,7 @@ import tc.oc.pgm.rotation.MapPoolManager;
 import tc.oc.pgm.rotation.RandomMapOrder;
 import tc.oc.pgm.tablist.MatchTabManager;
 import tc.oc.pgm.util.FileUtils;
+import tc.oc.pgm.util.UsernameResolver;
 import tc.oc.pgm.util.bukkit.BukkitUtils;
 import tc.oc.pgm.util.bukkit.ViaUtils;
 import tc.oc.pgm.util.compatability.SportPaperListener;
@@ -172,6 +173,7 @@ public class PGMPlugin extends JavaPlugin implements PGM, Listener {
 
     datastore = new CacheDatastore(datastore);
 
+    UsernameResolver.initializeUserAgent(this);
     try {
       mapLibrary.loadNewMaps(false).get(30, TimeUnit.SECONDS);
     } catch (ExecutionException | InterruptedException | TimeoutException e) {

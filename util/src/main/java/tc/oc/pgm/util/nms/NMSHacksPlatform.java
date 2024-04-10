@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Firework;
@@ -232,4 +233,6 @@ public interface NMSHacksPlatform {
   void spawnSpawnerParticles(World world, Location location);
 
   MaterialDataProviderPlatform getMaterialDataProvider();
+
+  Material getMaterialFromBlockState(BlockState blockState);
 }
