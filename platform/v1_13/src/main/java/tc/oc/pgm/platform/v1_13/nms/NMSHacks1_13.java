@@ -9,17 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.NameTagVisibility;
 import tc.oc.pgm.platform.v1_13.NullChunkGenerator;
@@ -34,6 +31,7 @@ import tc.oc.pgm.util.nms.v1_10_12.NMSHacks1_10_12;
 
 public class NMSHacks1_13 extends NMSHacks1_10_12 {
   public static Refl.IBlockData reflIBlockData = ReflectionProxy.getProxy(Refl.IBlockData.class);
+  private static final String PGM_NAMESPACE = "pgm";
 
   @Override
   public Set<Material> getMaterialCollection(ItemMeta itemMeta, String key) {
@@ -205,6 +203,18 @@ public class NMSHacks1_13 extends NMSHacks1_10_12 {
     return blockState.getType();
   }
 
+  private static int RECIPE_COUNTER = 0;
+
+  @Override
+  public ShapedRecipe createShapedRecipeFromOutput(ItemStack output) {
+    return new ShapedRecipe(createNamespacedKey("shapedrecipe_" + RECIPE_COUNTER++), output);
+  }
+
+  @Override
+  public ShapelessRecipe createShapelessRecipeFromOutput(ItemStack output) {
+    return new ShapelessRecipe(createNamespacedKey("shapedrecipe_" + RECIPE_COUNTER++), output);
+  }
+
   private Material woolFromDyeColor(final DyeColor dyeColor) {
     switch (dyeColor) {
       case WHITE:
@@ -242,5 +252,10 @@ public class NMSHacks1_13 extends NMSHacks1_10_12 {
       default:
         return Material.WHITE_WOOL;
     }
+  }
+
+  // TODO: use plugin instead of string namespace
+  private NamespacedKey createNamespacedKey(final String key) {
+    return new NamespacedKey(PGM_NAMESPACE, key);
   }
 }

@@ -25,9 +25,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.inventory.DoubleChestInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
@@ -416,5 +414,15 @@ public abstract class NMSHacksNoOp implements NMSHacksPlatform {
   @Override
   public Material getMaterialFromBlockState(BlockState blockState) {
     return blockState.getMaterial();
+  }
+
+  @Override
+  public ShapedRecipe createShapedRecipeFromOutput(ItemStack output) {
+    return new ShapedRecipe(output);
+  }
+
+  @Override
+  public ShapelessRecipe createShapelessRecipeFromOutput(ItemStack output) {
+    return new ShapelessRecipe(output);
   }
 }

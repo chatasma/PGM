@@ -25,6 +25,8 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
@@ -235,4 +237,8 @@ public interface NMSHacksPlatform {
   MaterialDataProviderPlatform getMaterialDataProvider();
 
   Material getMaterialFromBlockState(BlockState blockState);
+
+  ShapedRecipe createShapedRecipeFromOutput(ItemStack output);
+
+  ShapelessRecipe createShapelessRecipeFromOutput(ItemStack output);
 }
