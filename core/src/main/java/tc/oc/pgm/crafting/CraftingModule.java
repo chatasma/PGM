@@ -19,6 +19,7 @@ import tc.oc.pgm.api.map.factory.MapFactory;
 import tc.oc.pgm.api.map.factory.MapModuleFactory;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.util.material.matcher.SingleMaterialMatcher;
+import tc.oc.pgm.util.nms.NMSHacks;
 import tc.oc.pgm.util.nms.material.MaterialDataProvider;
 import tc.oc.pgm.util.xml.InvalidXMLException;
 import tc.oc.pgm.util.xml.XMLUtils;
@@ -95,7 +96,8 @@ public class CraftingModule implements MapModule<CraftingMatchModule> {
 
     public Recipe parseShapelessRecipe(MapFactory factory, Element elRecipe)
         throws InvalidXMLException {
-      ShapelessRecipe recipe = new ShapelessRecipe(parseRecipeResult(factory, elRecipe));
+      ShapelessRecipe recipe =
+          NMSHacks.createShapelessRecipeFromOutput(parseRecipeResult(factory, elRecipe));
 
       for (Element elIngredient : XMLUtils.getChildren(elRecipe, "ingredient", "i")) {
         SingleMaterialMatcher item = XMLUtils.parseMaterialPattern(elIngredient);
@@ -113,7 +115,8 @@ public class CraftingModule implements MapModule<CraftingMatchModule> {
 
     public Recipe parseShapedRecipe(MapFactory factory, Element elRecipe)
         throws InvalidXMLException {
-      ShapedRecipe recipe = new ShapedRecipe(parseRecipeResult(factory, elRecipe));
+      ShapedRecipe recipe =
+          NMSHacks.createShapedRecipeFromOutput(parseRecipeResult(factory, elRecipe));
 
       Element elShape = XMLUtils.getRequiredUniqueChild(elRecipe, "shape");
       List<String> rows = new ArrayList<>(3);
