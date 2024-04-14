@@ -2,6 +2,7 @@ package tc.oc.pgm.tracker.trackers;
 
 import static net.kyori.adventure.text.Component.translatable;
 
+import com.cryptomorin.xseries.XMaterial;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -264,7 +265,7 @@ public class CombatLogTracker implements Listener {
                 || Materials.isLava(landingBlock.getType())) {
               // Break if the player hits a solid block or lava
               break;
-            } else if (landingBlock.getType() == Material.WEB) {
+            } else if (landingBlock.getType() == XMaterial.COBWEB.parseMaterial()) {
               // If they hit web, reset their fall distance, but assume they keep falling
               fallDistance = -1;
             }

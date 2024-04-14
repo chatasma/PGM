@@ -23,10 +23,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
@@ -83,6 +80,8 @@ public interface NMSHacksPlatform {
   default void showInvisibles(Player player, boolean showInvisibles) {}
 
   default void setAffectsSpawning(Player player, boolean affectsSpawning) {}
+
+  default void setCollidesWithEntities(Player player, boolean interact) {}
 
   void clearArrowsInPlayer(Player player);
 
@@ -186,7 +185,11 @@ public interface NMSHacksPlatform {
 
   void setCanDestroy(ItemMeta itemMeta, Collection<Material> materials);
 
+  void setUnbreakable(ItemMeta itemMeta, boolean unbreakable);
+
   Set<Material> getCanDestroy(ItemMeta itemMeta);
+
+  boolean isUnbreakable(ItemMeta itemMeta);
 
   void setCanPlaceOn(ItemMeta itemMeta, Collection<Material> materials);
 
@@ -241,4 +244,8 @@ public interface NMSHacksPlatform {
   ShapedRecipe createShapedRecipeFromOutput(ItemStack output);
 
   ShapelessRecipe createShapelessRecipeFromOutput(ItemStack output);
+
+  ItemFlag asBukkit(tc.oc.pgm.util.nms.item.ItemFlag flag);
+
+  int countSlots(InventoryView inventoryView);
 }

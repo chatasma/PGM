@@ -26,10 +26,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
@@ -128,6 +125,10 @@ public interface NMSHacks {
 
   static void setAffectsSpawning(Player player, boolean affectsSpawning) {
     INSTANCE.setAffectsSpawning(player, affectsSpawning);
+  }
+
+  static void setCollidesWithEntities(Player player, boolean interact) {
+    INSTANCE.setCollidesWithEntities(player, interact);
   }
 
   static void clearArrowsInPlayer(Player player) {
@@ -337,8 +338,16 @@ public interface NMSHacks {
     INSTANCE.setCanDestroy(itemMeta, materials);
   }
 
+  static void setUnbreakable(ItemMeta itemMeta, boolean unbreakable) {
+    INSTANCE.setUnbreakable(itemMeta, unbreakable);
+  }
+
   static Set<Material> getCanDestroy(ItemMeta itemMeta) {
     return INSTANCE.getCanDestroy(itemMeta);
+  }
+
+  static boolean isUnbreakable(ItemMeta itemMeta) {
+    return INSTANCE.isUnbreakable(itemMeta);
   }
 
   static void setCanPlaceOn(ItemMeta itemMeta, Collection<Material> materials) {
@@ -501,5 +510,13 @@ public interface NMSHacks {
 
   static ShapelessRecipe createShapelessRecipeFromOutput(final ItemStack output) {
     return INSTANCE.createShapelessRecipeFromOutput(output);
+  }
+
+  static ItemFlag asBukkit(final tc.oc.pgm.util.nms.item.ItemFlag flag) {
+    return INSTANCE.asBukkit(flag);
+  }
+
+  static int countSlots(InventoryView inventoryView) {
+    return INSTANCE.countSlots(inventoryView);
   }
 }

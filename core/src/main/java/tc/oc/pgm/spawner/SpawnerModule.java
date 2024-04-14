@@ -27,6 +27,7 @@ import tc.oc.pgm.regions.RegionModule;
 import tc.oc.pgm.regions.RegionParser;
 import tc.oc.pgm.spawner.objects.SpawnableItem;
 import tc.oc.pgm.spawner.objects.SpawnablePotion;
+import tc.oc.pgm.util.nms.item.PotionTypeUtils;
 import tc.oc.pgm.util.xml.InheritingElement;
 import tc.oc.pgm.util.xml.InvalidXMLException;
 import tc.oc.pgm.util.xml.XMLUtils;
@@ -101,21 +102,23 @@ public class SpawnerModule implements MapModule<SpawnerMatchModule> {
           if (effects.isEmpty()) {
             throw new InvalidXMLException("Expected child effects, but found none", spawnerEl);
           }
-          int damageValue = 0;
+          PotionType potType = PotionType.WATER;
           if (potionEl.getAttribute("damage") != null) {
-            damageValue = XMLUtils.parseNumber(potionEl.getAttribute("damage"), Integer.class, 0);
+            int damageValue =
+                XMLUtils.parseNumber(potionEl.getAttribute("damage"), Integer.class, 0);
+            potType = PotionTypeUtils.potionTypeFromDamageValue(damageValue);
           } else {
             for (PotionEffect potionEffect : effects) {
               // PotionType lists "true" potions, PotionEffectType "potionEffect.getType()" lists
               // all possible status effects (ie wither, blindness, etc)
               // Use the first listed PotionType for potion color
               if (PotionType.getByEffect(potionEffect.getType()) != null) {
-                damageValue = PotionType.getByEffect(potionEffect.getType()).getDamageValue();
+                potType = PotionType.getByEffect(potionEffect.getType());
                 break;
               }
             }
           }
-          objects.add(new SpawnablePotion(effects, damageValue, id));
+          objects.add(new SpawnablePotion(effects, potType, id));
         }
 
         SpawnerDefinition spawnerDefinition =

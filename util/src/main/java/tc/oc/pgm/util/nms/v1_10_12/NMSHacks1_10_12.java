@@ -20,7 +20,7 @@ public class NMSHacks1_10_12 extends NMSHacks1_9 {
   }
 
   @Override
-  public @NotNull PacketContainer getMetadataPacket(Player player, float health) {
+  public @NotNull PacketContainer getHealthMetadataPacket(Player player, float health) {
     PacketContainer metadataPacket = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
 
     metadataPacket.getIntegers().write(0, player.getEntityId());

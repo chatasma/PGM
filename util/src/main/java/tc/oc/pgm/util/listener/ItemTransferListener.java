@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.*;
 import tc.oc.pgm.util.event.ItemTransferEvent;
 import tc.oc.pgm.util.event.PlayerItemTransferEvent;
+import tc.oc.pgm.util.nms.NMSHacks;
 
 /** A listener that calls {@link ItemTransferEvent} and {@link PlayerItemTransferEvent}. */
 public class ItemTransferListener implements Listener {
@@ -496,7 +497,7 @@ public class ItemTransferListener implements Listener {
       ItemStack cursor = event.getCursor().clone();
 
       for (int pass = 0; pass < 2; pass++) {
-        for (int rawSlot = 0; rawSlot < event.getView().countSlots(); rawSlot++) {
+        for (int rawSlot = 0; rawSlot < NMSHacks.countSlots(event.getView()); rawSlot++) {
           if (cursor.getAmount() >= cursor.getMaxStackSize()) {
             // If the gathered stack is full, we're done
             break;

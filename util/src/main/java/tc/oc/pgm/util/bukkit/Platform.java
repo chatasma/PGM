@@ -41,6 +41,22 @@ public enum Platform {
       () ->
           (Class<? extends NMSHacksPlatform>)
               ReflectionUtils.getClassFromName("tc.oc.pgm.platform.v1_13.nms.NMSHacks1_13"),
+      true),
+  SPIGOT_1_20(
+      "Spigot",
+      "1.20",
+      "1.20",
+      () ->
+          (Class<? extends NMSHacksPlatform>)
+              ReflectionUtils.getClassFromName("tc.oc.pgm.platform.v1_20.nms.NMSHacks1_20"),
+      true),
+  PAPER_1_20(
+      "Paper",
+      "1.20",
+      "1.20",
+      () ->
+          (Class<? extends NMSHacksPlatform>)
+              ReflectionUtils.getClassFromName("tc.oc.pgm.platform.v1_20.nms.NMSHacks1_20"),
       true);
 
   private static ClassLogger logger = ClassLogger.get(Platform.class);;

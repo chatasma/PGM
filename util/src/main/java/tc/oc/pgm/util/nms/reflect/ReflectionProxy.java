@@ -309,7 +309,8 @@ public class ReflectionProxy implements InvocationHandler {
   }
 
   private static Class<?> getAnnotatedClass(Class<?> declaringClass) {
-    if (declaringClass.isAnnotationPresent(Reflect.NMS.class)) {
+    if (declaringClass.isAnnotationPresent(Reflect.NMS.class)
+        || declaringClass.isAnnotationPresent(Reflect.NMS.List.class)) {
       for (Reflect.NMS nms : declaringClass.getDeclaredAnnotationsByType(Reflect.NMS.class)) {
         Class<?> parentClass = findNMSClass(nms.value());
         if (parentClass != null) {
@@ -317,7 +318,8 @@ public class ReflectionProxy implements InvocationHandler {
         }
       }
       throw new RuntimeException("Class not found for " + declaringClass);
-    } else if (declaringClass.isAnnotationPresent(Reflect.CB.class)) {
+    } else if (declaringClass.isAnnotationPresent(Reflect.CB.class)
+        || declaringClass.isAnnotationPresent(Reflect.CB.List.class)) {
       for (Reflect.CB cb : declaringClass.getDeclaredAnnotationsByType(Reflect.CB.class)) {
         try {
           return MinecraftReflectionUtils.getCraftBukkitClass(cb.value());
@@ -325,7 +327,8 @@ public class ReflectionProxy implements InvocationHandler {
         }
       }
       throw new RuntimeException("Class not found for " + declaringClass);
-    } else if (declaringClass.isAnnotationPresent(Reflect.B.class)) {
+    } else if (declaringClass.isAnnotationPresent(Reflect.B.class)
+        || declaringClass.isAnnotationPresent(Reflect.B.List.class)) {
       for (Reflect.B bukkit : declaringClass.getDeclaredAnnotationsByType(Reflect.B.class)) {
         try {
           return MinecraftReflectionUtils.getBukkitClass(bukkit.value());

@@ -13,9 +13,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedSignedProperty;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -109,7 +107,7 @@ public class NMSHacks1_9 extends NMSHacksNoOp {
         String blockString = block.toString(); // Format: Block{what we want}
         blockString = blockString.substring(6, blockString.length() - 1);
         Object nbtString = nbtTagString.build(blockString);
-        nbtTagList.add(canDestroyList, nbtString);
+        listTagAppend(canDestroyList, nbtString);
       }
     }
     if (!nbtTagList.isEmpty(canDestroyList)) unhandledTags.put(collectionName, canDestroyList);
@@ -151,13 +149,17 @@ public class NMSHacks1_9 extends NMSHacksNoOp {
         nbtTagCompound.setLong(tag, "UUIDMost", modifier.getUniqueId().getMostSignificantBits());
         nbtTagCompound.setLong(tag, "UUIDLeast", modifier.getUniqueId().getLeastSignificantBits());
         nbtTagCompound.setString(tag, "AttributeName", entry.getKey());
-        nbtTagList.add(list, tag);
+        listTagAppend(list, tag);
       }
 
       Map<String, Object> unhandledTags = refl.getUnhandledTags(meta);
 
       unhandledTags.put("AttributeModifiers", list);
     }
+  }
+
+  protected void listTagAppend(Object list, Object tag) {
+    nbtTagList.add(list, tag);
   }
 
   @Override
@@ -238,11 +240,11 @@ public class NMSHacks1_9 extends NMSHacksNoOp {
   @Override
   public void playDeathAnimation(Player player) {
     float health = 0.0f;
-    PacketContainer metadataPacket = getMetadataPacket(player, health);
+    PacketContainer metadataPacket = getHealthMetadataPacket(player, health);
 
     sendPacketToViewers(player, metadataPacket, true);
 
-    metadataPacket = getMetadataPacket(player, 1.0f);
+    metadataPacket = getHealthMetadataPacket(player, 1.0f);
     sendPacket(player, metadataPacket);
 
     //     Reimplement using Poses in 1.13+
@@ -259,7 +261,7 @@ public class NMSHacks1_9 extends NMSHacksNoOp {
   }
 
   @NotNull
-  public PacketContainer getMetadataPacket(Player player, float health) {
+  public PacketContainer getHealthMetadataPacket(Player player, float health) {
     PacketContainer metadataPacket = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
 
     metadataPacket.getIntegers().write(0, player.getEntityId());
@@ -518,7 +520,7 @@ public class NMSHacks1_9 extends NMSHacksNoOp {
     return packet;
   }
 
-  static EnumWrappers.PlayerInfoAction convertPlayerInfoAction(
+  private static EnumWrappers.PlayerInfoAction convertPlayerInfoAction(
       EnumPlayerInfoAction enumPlayerInfoAction) {
     switch (enumPlayerInfoAction) {
       case ADD_PLAYER:

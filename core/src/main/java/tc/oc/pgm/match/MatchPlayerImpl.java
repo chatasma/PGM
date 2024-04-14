@@ -230,7 +230,7 @@ public class MatchPlayerImpl implements MatchPlayer, Comparable<MatchPlayer> {
 
     // This is only possible in sportpaper
     NMSHacks.setAffectsSpawning(player, interact);
-    player.spigot().setCollidesWithEntities(interact);
+    NMSHacks.setCollidesWithEntities(player, interact);
   }
 
   @Override

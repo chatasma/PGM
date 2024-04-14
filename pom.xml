@@ -186,7 +186,7 @@
         <dependency>
             <groupId>fr.mrmicky</groupId>
             <artifactId>FastBoard</artifactId>
-            <version>2.0.2</version>
+            <version>2.1.0</version>
             <scope>compile</scope>
         </dependency>
 
@@ -194,7 +194,7 @@
         <dependency>
             <groupId>io.github.bananapuncher714</groupId>
             <artifactId>nbteditor</artifactId>
-            <version>7.18.5</version>
+            <version>7.19.2</version>
         </dependency>
         
         <!--Framework for creating interactive GUIs - https://github.com/MinusKube/SmartInvs -->

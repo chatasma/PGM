@@ -156,6 +156,11 @@ public abstract class NMSHacksNoOp implements NMSHacksPlatform {
   }
 
   @Override
+  public void setCollidesWithEntities(Player player, boolean interact) {
+    player.spigot().setCollidesWithEntities(interact);
+  }
+
+  @Override
   public int getPing(Player player) {
     return refl.getPlayerPing(refl.getPlayerHandle(player));
   }
@@ -275,6 +280,16 @@ public abstract class NMSHacksNoOp implements NMSHacksPlatform {
   @Override
   public void setCanDestroy(ItemMeta itemMeta, Collection<Material> materials) {
     setMaterialCollection(itemMeta, materials, "CanDestroy");
+  }
+
+  @Override
+  public void setUnbreakable(ItemMeta itemMeta, boolean unbreakable) {
+    itemMeta.spigot().setUnbreakable(unbreakable);
+  }
+
+  @Override
+  public boolean isUnbreakable(ItemMeta itemMeta) {
+    return itemMeta.spigot().isUnbreakable();
   }
 
   @Override
@@ -424,5 +439,30 @@ public abstract class NMSHacksNoOp implements NMSHacksPlatform {
   @Override
   public ShapelessRecipe createShapelessRecipeFromOutput(ItemStack output) {
     return new ShapelessRecipe(output);
+  }
+
+  @Override
+  public int countSlots(InventoryView inventoryView) {
+    return inventoryView.countSlots();
+  }
+
+  @Override
+  public ItemFlag asBukkit(tc.oc.pgm.util.nms.item.ItemFlag flag) {
+    switch (flag) {
+      case HIDE_ENCHANTS:
+        return ItemFlag.HIDE_ENCHANTS;
+      case HIDE_ATTRIBUTES:
+        return ItemFlag.HIDE_ATTRIBUTES;
+      case HIDE_UNBREAKABLE:
+        return ItemFlag.HIDE_UNBREAKABLE;
+      case HIDE_DESTROYS:
+        return ItemFlag.HIDE_DESTROYS;
+      case HIDE_PLACED_ON:
+        return ItemFlag.HIDE_PLACED_ON;
+      case HIDE_POTION_EFFECTS:
+        return ItemFlag.HIDE_POTION_EFFECTS;
+      default:
+        return null;
+    }
   }
 }

@@ -52,7 +52,7 @@ public class ItemRule {
       if (!canDestroy.isEmpty()) NMSHacks.setCanDestroy(meta, canDestroy);
       if (!canPlaceOn.isEmpty()) NMSHacks.setCanPlaceOn(meta, canPlaceOn);
 
-      if (this.meta.spigot().isUnbreakable()) meta.spigot().setUnbreakable(true);
+      if (NMSHacks.isUnbreakable(meta)) NMSHacks.setUnbreakable(meta, true);
 
       stack.setItemMeta(meta);
     }

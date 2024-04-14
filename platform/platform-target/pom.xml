@@ -19,10 +19,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <!-- depend on all supported versions -->
     <dependencies>
         <dependency>
             <groupId>tc.oc.pgm</groupId>
             <artifactId>platform-v1-13</artifactId>
+            <version>0.16-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>tc.oc.pgm</groupId>
+            <artifactId>platform-v1-20</artifactId>
             <version>0.16-SNAPSHOT</version>
         </dependency>
     </dependencies>

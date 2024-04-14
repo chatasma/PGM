@@ -7,6 +7,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionType;
 import tc.oc.pgm.api.PGM;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.spawner.Spawnable;
@@ -18,10 +19,10 @@ public class SpawnablePotion implements Spawnable {
   private final ItemStack potionItem;
   private final String spawnerId;
 
-  public SpawnablePotion(List<PotionEffect> potion, int damageValue, String spawnerId) {
+  public SpawnablePotion(List<PotionEffect> potion, PotionType potionType, String spawnerId) {
     this.spawnerId = spawnerId;
     // Potion "name" determines potion color
-    ItemStack potionItem = new Potion(damageValue).splash().toItemStack(1);
+    ItemStack potionItem = new Potion(potionType).splash().toItemStack(1);
     PotionMeta potionMeta = (PotionMeta) potionItem.getItemMeta();
     for (PotionEffect effect : potion) {
       potionMeta.addCustomEffect(effect, false);

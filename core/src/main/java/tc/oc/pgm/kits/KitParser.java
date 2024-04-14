@@ -27,7 +27,6 @@ import org.bukkit.FireworkEffect.Type;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -59,6 +58,7 @@ import tc.oc.pgm.util.attribute.AttributeModifier;
 import tc.oc.pgm.util.bukkit.BukkitUtils;
 import tc.oc.pgm.util.inventory.ItemMatcher;
 import tc.oc.pgm.util.nms.NMSHacks;
+import tc.oc.pgm.util.nms.item.ItemFlag;
 import tc.oc.pgm.util.nms.material.MaterialData;
 import tc.oc.pgm.util.nms.material.MaterialDataProvider;
 import tc.oc.pgm.util.xml.InvalidXMLException;
@@ -579,12 +579,13 @@ public abstract class KitParser {
 
     for (ItemFlag flag : ItemFlag.values()) {
       if (!XMLUtils.parseBoolean(Node.fromAttr(el, "show-" + itemFlagName(flag)), true)) {
-        meta.addItemFlags(flag);
+        final org.bukkit.inventory.ItemFlag bukkitItemFlag = NMSHacks.asBukkit(flag);
+        if (bukkitItemFlag != null) meta.addItemFlags(bukkitItemFlag);
       }
     }
 
     if (XMLUtils.parseBoolean(el.getAttribute("unbreakable"), false)) {
-      meta.spigot().setUnbreakable(true);
+      NMSHacks.setUnbreakable(meta, true);
     }
 
     Element elCanDestroy = el.getChild("can-destroy");
@@ -612,6 +613,10 @@ public abstract class KitParser {
         return "can-place-on";
       case HIDE_POTION_EFFECTS:
         return "other";
+      case HIDE_DYE:
+        return "dye";
+      case HIDE_ARMOR_TRIM:
+        return "armor-trim";
     }
     throw new IllegalStateException("Unknown item flag " + flag);
   }
