@@ -100,6 +100,25 @@ public class NMSHacks1_20 extends NMSHacks1_10_12 {
   }
 
   @Override
+  protected List<Player> getViewingPlayers(Entity entity) {
+    Object entityHandle = refl.getEntityHandle(entity);
+    Object nmsWorld = refl.getNmsWorldFromEntity(entityHandle);
+    Object chunkSource = refl.getChunkSourceFromNmsWorld(nmsWorld);
+    Object chunkMap = refl.getChunkMapFromChunkSource(chunkSource);
+    Map entityMap = refl.getEntityMapFromChunkMap(chunkMap);
+    Object entityTrackerEntry = entityMap.get(refl.getEntityId(entityHandle));
+    Set trackedPlayers = refl.getSeenByFromEntityTracker(entityTrackerEntry);
+
+    List<Player> players = new ArrayList<>();
+
+    for (Object trackedPlayer : trackedPlayers) {
+      Player bukkitPlayer = refl.getBukkitPlayer(trackedPlayer);
+      players.add(bukkitPlayer);
+    }
+    return players;
+  }
+
+  @Override
   public void spawnColoredArrowParticles(
       Color color, Player playerBukkit, Location projectileLocation) {
     playerBukkit.spawnParticle(

@@ -206,7 +206,7 @@ public class NMSHacks1_9 extends NMSHacksNoOp {
     }
   }
 
-  private List<Player> getViewingPlayers(Entity entity) {
+  protected List<Player> getViewingPlayers(Entity entity) {
     Object entityHandle = refl.getEntityHandle(entity);
     Object nmsWorld = refl.getNmsWorldFromEntity(entityHandle);
     Object entityTracker = refl.getEntityTracker(nmsWorld);

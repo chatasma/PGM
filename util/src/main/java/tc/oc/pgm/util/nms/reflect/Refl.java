@@ -36,9 +36,26 @@ public interface Refl {
   @Reflect.NMS("EntityFireball.dirZ")
   void setFireballDirZ(Object fireball, double amount);
 
+  @Reflect.NMS("world.entity.Entity.dM()")
   @Reflect.NMS("Entity.getWorld()")
   Object getNmsWorldFromEntity(Object handle);
 
+  @Reflect.NMS("world.level.GeneratorAccess.L()")
+  Object getChunkSourceFromNmsWorld(Object handle);
+
+  @Reflect.NMS("server.level.ChunkProviderServer.a")
+  Object getChunkMapFromChunkSource(Object handle);
+
+  @Reflect.NMS("server.level.PlayerChunkMap.K")
+  Map getEntityMapFromChunkMap(Object handle);
+
+  @Reflect.NMS("server.level.PlayerChunkMap$EntityTracker.f")
+  Set getSeenByFromEntityTracker(Object handle);
+
+  @Reflect.NMS("server.network.ServerPlayerConnection.p()")
+  Object getNmsPlayerFromConnection(Object handle);
+
+  @Reflect.NMS("world.entity.Entity.aj()")
   @Reflect.NMS("Entity.getId()")
   int getEntityId(Object handle);
 
@@ -54,6 +71,7 @@ public interface Refl {
   @Reflect.NMS("EntityTrackerEntry.trackedPlayers")
   Set getTrackedPlayers(Object trackerEntry);
 
+  @Reflect.NMS("server.level.EntityPlayer.getBukkitEntity()")
   @Reflect.NMS("EntityPlayer.getBukkitEntity()")
   Player getBukkitPlayer(Object nmsHandle);
 
