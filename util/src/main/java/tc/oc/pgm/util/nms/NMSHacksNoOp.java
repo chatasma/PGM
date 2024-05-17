@@ -334,6 +334,7 @@ public abstract class NMSHacksNoOp implements NMSHacksPlatform {
   public int getMaxWorldSize(World world) {
     return 29999984; // Vanilla's default
   }
+
   public ChunkGenerator nullChunkGenerator() {
     return NullChunkGenerator.INSTANCE;
   }
