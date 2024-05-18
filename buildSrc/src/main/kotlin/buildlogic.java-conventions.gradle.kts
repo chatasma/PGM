@@ -48,6 +48,8 @@ repositories {
     maven {
         url = uri("https://repo.maven.apache.org/maven2/")
     }
+
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
@@ -55,7 +57,7 @@ dependencies {
     compileOnly("com.viaversion:viaversion-api:4.9.2")
 
     // Send packets to players
-    implementation("com.comphenix.protocol:ProtocolLib:5.1.0")
+    compileOnly("com.comphenix.protocol:ProtocolLib:5.2.0-SNAPSHOT")
 
     implementation("org.jdom:jdom2:2.0.6.1")
 
@@ -97,7 +99,7 @@ dependencies {
 
 group = "tc.oc.pgm"
 version = "0.16-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 publishing {
     publications.create<MavenPublication>("maven") {

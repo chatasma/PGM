@@ -1,6 +1,8 @@
 package tc.oc.pgm.platform.v1_20.nms;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.InternalStructure;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
@@ -9,9 +11,24 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Ints;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.network.ServerPlayerConnection;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
@@ -20,6 +37,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.NameTagVisibility;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 import tc.oc.pgm.platform.v1_20.NullChunkGenerator;
 import tc.oc.pgm.platform.v1_20.material.LegacyMaterialUtils;
@@ -99,21 +117,49 @@ public class NMSHacks1_20 extends NMSHacks1_10_12 {
     playerBukkit.spawnParticle(Particle.CRIT, projectileLocation, 1);
   }
 
+//  @Override
+//  protected List<Player> getViewingPlayers(Entity entity) {
+//    Object entityHandle = refl.getEntityHandle(entity);
+//    Object nmsWorld = refl.getNmsWorldFromEntity(entityHandle);
+//    Object chunkSource = refl.getChunkSourceFromNmsWorld(nmsWorld);
+//    Object chunkMap = refl.getChunkMapFromChunkSource(chunkSource);
+//    Map entityMap = refl.getEntityMapFromChunkMap(chunkMap);
+//    Object entityTrackerEntry = entityMap.get(refl.getEntityId(entityHandle));
+//    Set trackedPlayers = refl.getSeenByFromEntityTracker(entityTrackerEntry);
+//
+//    List<Player> players = new ArrayList<>();
+//
+//    for (Object trackedPlayer : trackedPlayers) {
+//      Player bukkitPlayer = refl.getBukkitPlayer(trackedPlayer);
+//      players.add(bukkitPlayer);
+//    }
+//    return players;
+//  }
+
   @Override
   protected List<Player> getViewingPlayers(Entity entity) {
-    Object entityHandle = refl.getEntityHandle(entity);
-    Object nmsWorld = refl.getNmsWorldFromEntity(entityHandle);
-    Object chunkSource = refl.getChunkSourceFromNmsWorld(nmsWorld);
-    Object chunkMap = refl.getChunkMapFromChunkSource(chunkSource);
-    Map entityMap = refl.getEntityMapFromChunkMap(chunkMap);
-    Object entityTrackerEntry = entityMap.get(refl.getEntityId(entityHandle));
-    Set trackedPlayers = refl.getSeenByFromEntityTracker(entityTrackerEntry);
+    net.minecraft.world.entity.Entity entityHandle = ((CraftEntity) entity).getHandle();
+    final Set<ServerPlayerConnection> seenBy =
+      ((ServerChunkCache) entityHandle.level().getChunkSource()).chunkMap.entityMap.get(entityHandle.getId()).seenBy;
 
     List<Player> players = new ArrayList<>();
 
-    for (Object trackedPlayer : trackedPlayers) {
-      Player bukkitPlayer = refl.getBukkitPlayer(trackedPlayer);
+    for (ServerPlayerConnection person : seenBy) {
+      final Player bukkitPlayer = person.getPlayer().getBukkitEntity();
       players.add(bukkitPlayer);
+    }
+    return players;
+  }
+
+  protected List<Player> getViewingPlayers(final Entity entity, final boolean excludeSpectators) {
+    final List<Player> players = new ArrayList<>();
+    for (Player nearbyPlayer : getViewingPlayers(entity)) {
+      if (excludeSpectators) {
+        Entity spectatorTarget = nearbyPlayer.getSpectatorTarget();
+        if (spectatorTarget != null && spectatorTarget.getUniqueId().equals(entity.getUniqueId()))
+          continue;
+      }
+      players.add(nearbyPlayer);
     }
     return players;
   }
@@ -156,6 +202,71 @@ public class NMSHacks1_20 extends NMSHacks1_10_12 {
   @Override
   public MaterialDataProviderPlatform getMaterialDataProvider() {
     return new MaterialDataProvider1_13();
+  }
+
+  @Override
+  public void playDeathAnimation(Player player) {
+    // set health to 0
+//    replaceOrSetSynchedEntityData(
+//      player,
+//      new SynchedEntityData.DataItem<Float>(LivingEntity.DATA_HEALTH_ID, 0.0f)
+//    );
+//    final ClientboundTeleportEntityPacket teleportPacket =
+//            new ClientboundTeleportEntityPacket(((CraftPlayer) player).getHandle());
+//
+//    final SynchedEntityData synchedEntityData = getSynchedEntityData(player);
+//    getViewingPlayers(player, true).forEach((nearby) -> refreshEntityData(synchedEntityData, nearby));
+//    sendPacketToViewers(player, teleportPacket, true);
+  }
+
+  @Override
+  public void setImmediateRespawn(World world, boolean value) {
+    world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, value);
+  }
+
+
+  @Override
+  public void showBorderWarning(Player player, boolean show) {
+    if (!show) {
+      player.setWorldBorder(null);
+      return;
+    }
+    final World world = player.getWorld();
+    WorldBorder worldBorder = world.getWorldBorder();
+    WorldBorder fakeBorder = Bukkit.createWorldBorder();
+
+    fakeBorder.setCenter(worldBorder.getCenter());
+    fakeBorder.setDamageAmount(worldBorder.getDamageAmount());
+    fakeBorder.setDamageBuffer(worldBorder.getDamageBuffer());
+    fakeBorder.setSize(worldBorder.getSize());
+    fakeBorder.setWarningDistance(300000000);
+    fakeBorder.setWarningTime(worldBorder.getWarningTime());
+
+    player.setWorldBorder(fakeBorder);
+  }
+
+  public void sendPacketToViewers(Entity entity, Packet<?> packet, boolean excludeSpectators) {
+    getViewingPlayers(entity, true).forEach((nearby) -> sendPacketNative(nearby, packet));
+  }
+
+  private void refreshEntityData(final SynchedEntityData synchedEntityData, final Player target) {
+    synchedEntityData.refresh(((CraftPlayer) target).getHandle());
+  }
+
+  private <T> void replaceOrSetSynchedEntityData(
+      final Player player,
+      final SynchedEntityData.DataItem<T> dataItem
+  ) {
+    final SynchedEntityData synchedEntityData = getSynchedEntityData(player);
+    if (synchedEntityData.hasItem(dataItem.getAccessor())) {
+      synchedEntityData.set(dataItem.getAccessor(), dataItem.getValue());
+    } else {
+      synchedEntityData.define(dataItem.getAccessor(), dataItem.getValue());
+    }
+  }
+
+  private SynchedEntityData getSynchedEntityData(final Player player) {
+    return ((CraftPlayer) player).getHandle().getEntityData();
   }
 
   @Override
@@ -381,12 +492,19 @@ public class NMSHacks1_20 extends NMSHacks1_10_12 {
 
   @Override
   public Object destroyEntitiesPacket(int... entityIds) {
-    PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
+      return new ClientboundRemoveEntitiesPacket(entityIds);
+  }
 
-    // now an int list, rather than array
-    packet.getIntLists().write(0, Ints.asList(entityIds));
-
-    return packet;
+  private static final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+  @Override
+  public void sendPacket(Player bukkitPlayer, Object packet) {
+    if (packet != null && bukkitPlayer != null) {
+      if (packet instanceof Packet<?>) {
+        sendPacketNative(bukkitPlayer, (Packet<?>) packet);
+        return;
+      }
+      protocolManager.sendServerPacket(bukkitPlayer, (PacketContainer) packet);
+    }
   }
 
   @Override
@@ -523,49 +641,46 @@ public class NMSHacks1_20 extends NMSHacks1_10_12 {
     dataWatcher.setObject(11, true, true);
   }
 
+  // Rotation angles in the protocol are in steps of 1/256th, scale appropriately
+  protected float normalizeAngle(float angle) {
+    return angle * (256.0F / 360.0F);
+  }
+
+  private static final int SHARED_FLAGS_ENTITY_DATA_VALUE_ID = 0;
+  private static final int NO_GRAVITY_DATA_VALUE_ID = 5;
+  private static final EntityDataAccessor<Byte> SHARED_FLAGS_ENTITY_DATA_ACCESSOR = new EntityDataAccessor<Byte>(
+      SHARED_FLAGS_ENTITY_DATA_VALUE_ID,
+      EntityDataSerializers.BYTE
+  );
+  private static final EntityDataAccessor<Boolean> NO_GRAVITY_ENTITY_DATA_ACCESSOR = new EntityDataAccessor<Boolean>(
+      NO_GRAVITY_DATA_VALUE_ID,
+      EntityDataSerializers.BOOLEAN
+  );
   @Override
   public void spawnFakeArmorStand(
       Player player, int entityId, Location location, org.bukkit.util.Vector velocity) {
-    PacketContainer packet = new PacketContainer(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
-    packet
-        .getIntegers()
-        .write(0, entityId)
-        .write(1, 30) // armor stand
-        .write(2, (int) (velocity.getX() * 8000))
-        .write(3, (int) (velocity.getY() * 8000))
-        .write(4, (int) (velocity.getZ() * 8000));
-    packet
-        .getDoubles()
-        .write(0, location.getX())
-        .write(1, location.getY())
-        .write(2, location.getZ());
+    final ClientboundAddEntityPacket addEntityPacket = new ClientboundAddEntityPacket(
+        entityId,
+        UUID.randomUUID(),
+        location.getX(), location.getY(), location.getZ(),
+        normalizeAngle(location.getPitch()), normalizeAngle(location.getYaw()),
+        EntityType.ARMOR_STAND, 0,
+        new Vec3(velocity.getX(), velocity.getY(), velocity.getZ()), normalizeAngle(location.getPitch())
+    );
+    final ClientboundSetEntityDataPacket setEntityDataPacket = new ClientboundSetEntityDataPacket(
+        entityId,
+        Arrays.asList(
+          SynchedEntityData.DataValue.create(ArmorStand.DATA_CLIENT_FLAGS, (byte) 0x0),
+          SynchedEntityData.DataValue.create(SHARED_FLAGS_ENTITY_DATA_ACCESSOR, (byte) (1 << net.minecraft.world.entity.Entity.FLAG_INVISIBLE)),
+          SynchedEntityData.DataValue.create(NO_GRAVITY_ENTITY_DATA_ACCESSOR, true)
+        )
+    );
+    sendPacketNative(player, addEntityPacket);
+    sendPacketNative(player, setEntityDataPacket);
+  }
 
-    packet
-        .getBytes()
-        .write(0, (byte) (int) (location.getYaw() * 256.0F / 360.0F))
-        .write(1, (byte) (int) (location.getPitch() * 256.0F / 360.0F))
-        .write(2, (byte) (int) (location.getPitch() * 256.0F / 360.0F));
-
-    packet.getUUIDs().write(0, UUID.randomUUID());
-
-    WrappedDataWatcher dataWatcher = new WrappedDataWatcher();
-    dataWatcher.setObject(
-        new WrappedDataWatcher.WrappedDataWatcherObject(
-            0, WrappedDataWatcher.Registry.get(Byte.class)),
-        (byte) 0x20);
-    // unsure which this is supposed to be, assume its no gravity
-    dataWatcher.setObject(
-        new WrappedDataWatcher.WrappedDataWatcherObject(
-            5, WrappedDataWatcher.Registry.get(Boolean.class)),
-        true);
-    dataWatcher.setObject(
-        new WrappedDataWatcher.WrappedDataWatcherObject(
-            15, WrappedDataWatcher.Registry.get(Byte.class)),
-        (byte) 0x8);
-
-    packet.getDataWatcherModifier().write(0, dataWatcher);
-
-    sendPacket(player, packet);
+  private void sendPacketNative(final Player player, final Packet<?> packet) {
+    ((CraftPlayer) player).getHandle().connection.send(packet);
   }
 
   private Material woolFromDyeColor(final DyeColor dyeColor) {

@@ -519,4 +519,8 @@ public interface NMSHacks {
   static int countSlots(InventoryView inventoryView) {
     return INSTANCE.countSlots(inventoryView);
   }
+
+  static void setImmediateRespawn(World world, boolean value) {
+    INSTANCE.setImmediateRespawn(world, value);
+  }
 }

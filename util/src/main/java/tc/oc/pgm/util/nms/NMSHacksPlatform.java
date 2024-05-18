@@ -248,4 +248,6 @@ public interface NMSHacksPlatform {
   ItemFlag asBukkit(tc.oc.pgm.util.nms.item.ItemFlag flag);
 
   int countSlots(InventoryView inventoryView);
+
+  void setImmediateRespawn(World world, boolean value);
 }

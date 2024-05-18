@@ -794,10 +794,13 @@ public class NMSHacks1_8 extends NMSHacksNoOp {
   @Override
   public void spawnFakeArmorStand(Player player, int entityId, Location location, Vector velocity) {
     DataWatcher dataWatcher = new DataWatcher(null);
+    // invisible
     int flags = 0;
     flags |= 0x20;
     dataWatcher.a(0, (byte) flags);
+    // airticks(?)
     dataWatcher.a(1, (short) 0);
+    // regular-size armor stand, no arms, baseplate, no marker
     int flags1 = 0;
     dataWatcher.a(10, (byte) flags1);
     PacketPlayOutSpawnEntityLiving packet = new PacketPlayOutSpawnEntityLiving();

@@ -466,4 +466,7 @@ public abstract class NMSHacksNoOp implements NMSHacksPlatform {
         return null;
     }
   }
+
+  @Override
+  public void setImmediateRespawn(World world, boolean value) {}
 }

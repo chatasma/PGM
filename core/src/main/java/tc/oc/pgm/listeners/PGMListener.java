@@ -241,6 +241,12 @@ public class PGMListener implements Listener {
     setGameRule(event, GameRule.DO_DAYLIGHT_CYCLE.getId(), false);
   }
 
+  // force respawn 1.20
+  @EventHandler
+  public void forceRespawn(final MatchLoadEvent event) {
+    NMSHacks.setImmediateRespawn(event.getMatch().getWorld(), true);
+  }
+
   @EventHandler
   public void unlockTime(final MatchStartEvent event) {
     event

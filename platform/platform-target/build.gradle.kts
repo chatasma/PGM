@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     implementation(project(":platform-v1-13"))
-    implementation(project(":platform-v1-20"))
+    implementation(project(":platform-v1-20", "reobf"))
 }
 
 description = "platform-target"
