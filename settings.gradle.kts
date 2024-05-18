@@ -1,0 +1,11 @@
+rootProject.name = "pgm"
+include(":core")
+include(":platform-v1-20")
+include(":server")
+include(":platform-target")
+include(":platform")
+include(":platform-v1-13")
+include(":util")
+project(":platform-v1-20").projectDir = file("platform/v1_20")
+project(":platform-target").projectDir = file("platform/platform-target")
+project(":platform-v1-13").projectDir = file("platform/v1_13")
