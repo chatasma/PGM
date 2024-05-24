@@ -34,6 +34,8 @@ import org.bukkit.util.Vector;
 import tc.oc.pgm.util.attribute.AttributeMap;
 import tc.oc.pgm.util.attribute.AttributeModifier;
 import tc.oc.pgm.util.chunk.NullChunkGenerator;
+import tc.oc.pgm.util.inventory.tag.ItemTag;
+import tc.oc.pgm.util.inventory.tag.LegacyItemTag;
 import tc.oc.pgm.util.nms.attribute.AttributeMapNoOp;
 import tc.oc.pgm.util.nms.entity.fake.FakeEntity;
 import tc.oc.pgm.util.nms.entity.fake.FakeEntityNoOp;
@@ -469,4 +471,9 @@ public abstract class NMSHacksNoOp implements NMSHacksPlatform {
 
   @Override
   public void setImmediateRespawn(World world, boolean value) {}
+
+  @Override
+  public ItemTag<String> getStringItemTag() {
+    return new LegacyItemTag();
+  }
 }

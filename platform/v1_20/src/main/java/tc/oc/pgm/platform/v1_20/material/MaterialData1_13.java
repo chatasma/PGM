@@ -2,6 +2,7 @@ package tc.oc.pgm.platform.v1_20.material;
 
 import java.util.EnumSet;
 import java.util.Set;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -172,6 +173,17 @@ public class MaterialData1_13 implements MaterialData {
 
   public MaterialData1_13 copy() {
     return new MaterialData1_13(this.material, this.blockData, this.similarMaterials);
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (this == other) return true;
+    if (!(other instanceof MaterialData1_13)) return false;
+    final BlockData otherBlockData = ((MaterialData1_13) other).blockData;
+    if (otherBlockData == null || blockData == null) {
+      return this.material == ((MaterialData1_13) other).material;
+    }
+    return otherBlockData.equals(blockData);
   }
 
   @Override

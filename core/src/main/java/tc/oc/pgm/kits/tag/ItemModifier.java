@@ -2,6 +2,7 @@ package tc.oc.pgm.kits.tag;
 
 import java.util.EnumSet;
 import java.util.HashSet;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

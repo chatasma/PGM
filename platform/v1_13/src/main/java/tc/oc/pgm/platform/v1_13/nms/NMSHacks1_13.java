@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
@@ -52,7 +53,8 @@ public class NMSHacks1_13 extends NMSHacks1_10_12 {
   }
 
   @Override
-  public boolean canMineBlock(Material material, ItemStack tool) {
+  public boolean canMineBlock(Block block, ItemStack tool) {
+    final Material material = block.getType();
     if (!material.isBlock()) {
       throw new IllegalArgumentException("Material '" + material + "' is not a block");
     }

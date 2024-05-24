@@ -1,5 +1,6 @@
 package tc.oc.pgm.listeners;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import java.lang.annotation.Retention;
@@ -471,7 +472,7 @@ public class BlockTransformListener implements Listener {
     Map<Block, BlockState> newStates = new HashMap<>();
 
     // Add the arm of the piston, which will extend into the adjacent block.
-    MaterialData materialData = MaterialDataProvider.from(Material.PISTON_EXTENSION);
+    MaterialData materialData = MaterialDataProvider.from(XMaterial.PISTON_HEAD.parseMaterial());
     PistonExtension pistonExtension = (PistonExtension) materialData;
     pistonExtension.setFacingDirection(event.getDirection());
     BlockState pistonExtensionState = event.getBlock().getRelative(event.getDirection()).getState();

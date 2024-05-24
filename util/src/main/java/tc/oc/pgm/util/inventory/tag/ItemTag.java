@@ -2,6 +2,7 @@ package tc.oc.pgm.util.inventory.tag;
 
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import tc.oc.pgm.util.nms.NMSHacks;
 
 /** A persistent data holder for {@link ItemStack}s. */
 public interface ItemTag<T> {
@@ -47,8 +48,7 @@ public interface ItemTag<T> {
    * @return An item tag.
    */
   static ItemTag<String> newString(String key) {
-    // TODO: Add an implementation that uses the 1.14+ org.bukkit.persistence API
-    return new LegacyItemTag();
+    return NMSHacks.getStringItemTag();
   }
 
   /**

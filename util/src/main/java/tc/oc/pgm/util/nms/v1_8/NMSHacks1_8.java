@@ -832,7 +832,8 @@ public class NMSHacks1_8 extends NMSHacksNoOp {
   }
 
   @Override
-  public boolean canMineBlock(Material material, ItemStack tool) {
+  public boolean canMineBlock(Block block, ItemStack tool) {
+    final Material material = block.getType();
     if (!material.isBlock()) {
       throw new IllegalArgumentException("Material '" + material + "' is not a block");
     }

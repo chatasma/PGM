@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>Strings are encoded as hex and added as color codes in an item's lore. Clients are unable to
  * see the data since the codes are not attached to any string.
  */
-final class LegacyItemTag implements ItemTag<String> {
+public final class LegacyItemTag implements ItemTag<String> {
 
   private static final AtomicInteger IDS = new AtomicInteger();
   private static final Charset CHARSET = StandardCharsets.US_ASCII;
@@ -36,7 +36,7 @@ final class LegacyItemTag implements ItemTag<String> {
   private final String sequence; // A string that appears before and after the encoded data
   private final Pattern regex; // A pattern to match the data, 1st group is the encoded data
 
-  LegacyItemTag() {
+  public LegacyItemTag() {
     this.sequence = String.format(SEQUENCE, nextId());
     this.regex = Pattern.compile(sequence + "(.*)" + sequence);
   }

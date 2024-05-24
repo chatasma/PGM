@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import tc.oc.pgm.util.attribute.AttributeMap;
 import tc.oc.pgm.util.attribute.AttributeModifier;
 import tc.oc.pgm.util.block.RayBlockIntersection;
+import tc.oc.pgm.util.inventory.tag.ItemTag;
 import tc.oc.pgm.util.nms.entity.fake.FakeEntity;
 import tc.oc.pgm.util.nms.entity.potion.EntityPotion;
 import tc.oc.pgm.util.nms.material.MaterialData;
@@ -175,7 +176,7 @@ public interface NMSHacksPlatform {
    *
    * <p>Derived from CraftBlock.itemCausesDrops()
    */
-  boolean canMineBlock(Material material, ItemStack tool);
+  boolean canMineBlock(Block block, ItemStack tool);
 
   void resetDimension(World world);
 
@@ -250,4 +251,6 @@ public interface NMSHacksPlatform {
   int countSlots(InventoryView inventoryView);
 
   void setImmediateRespawn(World world, boolean value);
+
+  ItemTag<String> getStringItemTag();
 }

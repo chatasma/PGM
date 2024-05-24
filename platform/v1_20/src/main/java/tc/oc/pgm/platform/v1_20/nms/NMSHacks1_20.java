@@ -8,7 +8,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.*;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.primitives.Ints;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,18 +18,18 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerChunkCache;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.*;
@@ -37,11 +37,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.NameTagVisibility;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 import tc.oc.pgm.platform.v1_20.NullChunkGenerator;
+import tc.oc.pgm.platform.v1_20.itemtag.StringItemTag;
 import tc.oc.pgm.platform.v1_20.material.LegacyMaterialUtils;
 import tc.oc.pgm.platform.v1_20.material.MaterialDataProvider1_13;
+import tc.oc.pgm.util.inventory.tag.ItemTag;
 import tc.oc.pgm.util.nms.EnumPlayerInfoAction;
 import tc.oc.pgm.util.nms.material.MaterialData;
 import tc.oc.pgm.util.nms.material.MaterialDataProvider;
@@ -76,19 +77,27 @@ public class NMSHacks1_20 extends NMSHacks1_10_12 {
   }
 
   @Override
-  public boolean canMineBlock(Material material, ItemStack tool) {
-    if (!material.isBlock()) {
-      throw new IllegalArgumentException("Material '" + material + "' is not a block");
-    }
+  public boolean canMineBlock(Block block, ItemStack tool) {
+//    final net.minecraft.world.item.Item toolNMS = CraftMagicNumbers.getItem(tool.getType());
+//    toolNMS.isCorrectToolForDrops(((CraftBlock) block).getNMS());
+    return block.isPreferredTool(tool);
 
-    Object nmsBlock = craftMagicNumbers.getBlock(material);
-    Object nmsTool = tool == null ? null : craftMagicNumbers.getItem(tool.getType());
+//    Object nmsBlock = craftMagicNumbers.getBlock(material);
+//    Object nmsTool = tool == null ? null : craftMagicNumbers.getItem(tool.getType());
+//
+//    Object iBlockData = reflBlock.getBlockData(nmsBlock);
+//
+//    boolean alwaysDestroyable = refl.isAlwaysDestroyable(reflIBlockData.getMaterial(nmsBlock));
+//    boolean toolCanDestroy = nmsTool != null && refl.canDestroySpecialBlock(nmsTool, iBlockData);
+//    return nmsBlock != null && (alwaysDestroyable || toolCanDestroy);
+  }
 
-    Object iBlockData = reflBlock.getBlockData(nmsBlock);
-
-    boolean alwaysDestroyable = refl.isAlwaysDestroyable(reflIBlockData.getMaterial(nmsBlock));
-    boolean toolCanDestroy = nmsTool != null && refl.canDestroySpecialBlock(nmsTool, iBlockData);
-    return nmsBlock != null && (alwaysDestroyable || toolCanDestroy);
+  @Override
+  public void skipFireworksLaunch(Firework firework) {
+    firework.setLife(2);
+    firework.setMaxLife(2);
+    sendPacketToViewers(
+            firework, entityMetadataPacket(firework.getEntityId(), firework, false), false);
   }
 
   @Override
@@ -679,9 +688,17 @@ public class NMSHacks1_20 extends NMSHacks1_10_12 {
     sendPacketNative(player, setEntityDataPacket);
   }
 
+  @Override
+  public ItemTag<String> getStringItemTag() {
+    return new StringItemTag();
+  }
+
   private void sendPacketNative(final Player player, final Packet<?> packet) {
     ((CraftPlayer) player).getHandle().connection.send(packet);
   }
+
+  @Override
+  public void sendLegacyWearing(Player player, int slot, ItemStack item) {}
 
   private Material woolFromDyeColor(final DyeColor dyeColor) {
     switch (dyeColor) {

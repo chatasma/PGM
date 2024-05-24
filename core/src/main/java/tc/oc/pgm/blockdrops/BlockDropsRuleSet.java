@@ -106,12 +106,11 @@ public class BlockDropsRuleSet {
       Entity actor = blockTransformEvent.getActor();
       if (actor instanceof Player) {
         rightToolUsed =
-            NMSHacks.canMineBlock(material.getMaterial(), ((Player) actor).getItemInHand());
+            NMSHacks.canMineBlock(block.getBlock(), ((Player) actor).getItemInHand());
       }
     } else if (event instanceof BlockBreakEvent) {
       rightToolUsed =
-          NMSHacks.canMineBlock(
-              material.getMaterial(), ((BlockBreakEvent) event).getPlayer().getItemInHand());
+          NMSHacks.canMineBlock(block.getBlock(), ((BlockBreakEvent) event).getPlayer().getItemInHand());
     }
 
     for (BlockDropsRule rule : this.rules) {

@@ -2,6 +2,8 @@ package tc.oc.pgm.doublejump;
 
 import java.util.Iterator;
 import java.util.Map;
+
+import com.cryptomorin.xseries.XSound;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -109,7 +111,8 @@ public class DoubleJumpMatchModule implements MatchModule, Listener, Tickable {
       impulse.multiply(jumper.kit.power / 3f);
       event.getPlayer().setVelocity(impulse);
 
-      player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_INFECT, 0.5f, 1.8f);
+
+      player.getWorld().playSound(player.getLocation(), XSound.ENTITY_ZOMBIE_INFECT.parseSound(), 0.5f, 1.8f);
     }
   }
 

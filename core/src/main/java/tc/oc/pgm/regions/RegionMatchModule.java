@@ -3,14 +3,11 @@ package tc.oc.pgm.regions;
 import static tc.oc.pgm.api.map.MapProtos.REGION_PRIORITY_VERSION;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LeashHitch;
-import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -408,20 +405,7 @@ public class RegionMatchModule implements MatchModule, Listener {
 
   private static BlockState getHangingBlockState(Hanging hanging) {
     Block block = hanging.getLocation().getBlock();
-    Material type = getHangingType(hanging);
-    return type == null ? null : BlockStates.cloneWithMaterial(block, type);
-  }
-
-  private static Material getHangingType(Hanging hanging) {
-    if (hanging instanceof Painting) {
-      return Material.PAINTING;
-    } else if (hanging instanceof ItemFrame) {
-      return Material.ITEM_FRAME;
-    } else if (hanging instanceof LeashHitch) {
-      return Material.LEASH;
-    } else {
-      return null;
-    }
+    return block.getState();
   }
 
   /**

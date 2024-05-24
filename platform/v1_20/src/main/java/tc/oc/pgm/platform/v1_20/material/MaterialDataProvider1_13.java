@@ -28,6 +28,9 @@ public class MaterialDataProvider1_13 implements MaterialDataProviderPlatform {
     // XMaterial gets a few incorrect due to cross version material name collision
     materialDataCache.put(
         "STONE_SLAB2", new MaterialData1_13(XMaterial.RED_SANDSTONE_SLAB.parseMaterial(), true));
+    // 'wood' is generally accepted to be oak planks, XSeries defines them as acacia
+    materialDataCache.put(
+            "WOOD", new MaterialData1_13(XMaterial.OAK_PLANKS.parseMaterial(), true));
   }
 
   @Override

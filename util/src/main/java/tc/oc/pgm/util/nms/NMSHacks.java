@@ -38,6 +38,7 @@ import tc.oc.pgm.util.attribute.AttributeMap;
 import tc.oc.pgm.util.attribute.AttributeModifier;
 import tc.oc.pgm.util.block.RayBlockIntersection;
 import tc.oc.pgm.util.bukkit.Platform;
+import tc.oc.pgm.util.inventory.tag.ItemTag;
 import tc.oc.pgm.util.nms.entity.fake.FakeEntity;
 import tc.oc.pgm.util.nms.entity.potion.EntityPotion;
 import tc.oc.pgm.util.nms.material.MaterialData;
@@ -326,8 +327,8 @@ public interface NMSHacks {
    *
    * <p>Derived from CraftBlock.itemCausesDrops()
    */
-  static boolean canMineBlock(Material material, ItemStack tool) {
-    return INSTANCE.canMineBlock(material, tool);
+  static boolean canMineBlock(Block block, ItemStack tool) {
+    return INSTANCE.canMineBlock(block, tool);
   }
 
   static void resetDimension(World world) {
@@ -522,5 +523,9 @@ public interface NMSHacks {
 
   static void setImmediateRespawn(World world, boolean value) {
     INSTANCE.setImmediateRespawn(world, value);
+  }
+
+  static ItemTag<String> getStringItemTag() {
+    return INSTANCE.getStringItemTag();
   }
 }
