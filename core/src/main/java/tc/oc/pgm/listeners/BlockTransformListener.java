@@ -472,7 +472,7 @@ public class BlockTransformListener implements Listener {
     Map<Block, BlockState> newStates = new HashMap<>();
 
     // Add the arm of the piston, which will extend into the adjacent block.
-    MaterialData materialData = MaterialDataProvider.from(XMaterial.PISTON_HEAD.parseMaterial());
+    MaterialData materialData = MaterialDataProvider.from(event.getBlock());
     PistonExtension pistonExtension = (PistonExtension) materialData;
     pistonExtension.setFacingDirection(event.getDirection());
     BlockState pistonExtensionState = event.getBlock().getRelative(event.getDirection()).getState();

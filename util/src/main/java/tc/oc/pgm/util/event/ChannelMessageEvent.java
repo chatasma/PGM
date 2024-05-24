@@ -12,6 +12,7 @@ public class ChannelMessageEvent extends PreemptiveEvent {
   private String message;
 
   public ChannelMessageEvent(Channel channel, Player sender, String message) {
+    super(true);
     this.channel = channel;
     this.sender = sender;
     this.message = message;

@@ -370,7 +370,7 @@ public class ChatDispatcher implements Listener {
       final @NotNull Set<Player> players,
       final @NotNull Channel channel) {
     final AsyncPlayerChatEvent event =
-        new AsyncPlayerChatEvent(false, sender.getBukkit(), message, players);
+        new AsyncPlayerChatEvent(true, sender.getBukkit(), message, players);
     event.setFormat(format);
     CHAT_EVENT_CACHE.put(event, true);
     match.callEvent(event);

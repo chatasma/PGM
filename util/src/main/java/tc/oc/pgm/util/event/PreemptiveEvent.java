@@ -11,10 +11,15 @@ public abstract class PreemptiveEvent extends Event implements Cancellable {
   private @Nullable Component reason;
 
   protected PreemptiveEvent() {
-    this(null);
+    this(false);
   }
 
-  protected PreemptiveEvent(final @Nullable Component reason) {
+  protected PreemptiveEvent(final boolean async) {
+    this(null, async);
+  }
+
+  protected PreemptiveEvent(final @Nullable Component reason, final boolean async) {
+    super(async);
     this.reason = reason;
   }
 

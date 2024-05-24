@@ -1,19 +1,25 @@
 package tc.oc.pgm.platform.v1_20.material;
 
+import com.cryptomorin.xseries.SkullUtils;
 import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.Maps;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Skull;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Piston;
+import org.bukkit.craftbukkit.v1_20_R3.block.impl.CraftSkull;
+import org.bukkit.craftbukkit.v1_20_R3.block.impl.CraftSkullPlayer;
 import org.bukkit.entity.Minecart;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.ItemStack;
@@ -29,8 +35,9 @@ public class MaterialDataProvider1_13 implements MaterialDataProviderPlatform {
     materialDataCache.put(
         "STONE_SLAB2", new MaterialData1_13(XMaterial.RED_SANDSTONE_SLAB.parseMaterial(), true));
     // 'wood' is generally accepted to be oak planks, XSeries defines them as acacia
-    materialDataCache.put(
-            "WOOD", new MaterialData1_13(XMaterial.OAK_PLANKS.parseMaterial(), true));
+    materialDataCache.put("WOOD", new MaterialData1_13(XMaterial.OAK_PLANKS.parseMaterial(), true));
+    // 'skull' just becomes a Skull1_13, which is assigned to blocks of data CraftSkullPlayer/CraftSkull
+    materialDataCache.put("SKULL", new Skull1_13(XMaterial.PLAYER_HEAD.parseMaterial(), true));
   }
 
   @Override
@@ -49,7 +56,9 @@ public class MaterialDataProvider1_13 implements MaterialDataProviderPlatform {
   }
 
   public MaterialData1_13 from(BlockData blockData) {
-    if (blockData instanceof Door) {
+    if (blockData instanceof CraftSkullPlayer || blockData instanceof CraftSkull) {
+      return new Skull1_13(blockData.getMaterial(), true);
+    } else if (blockData instanceof Door) {
       return new Door1_13(blockData);
     } else if (blockData instanceof Piston) {
       return new PistonExtension1_13(blockData);
@@ -65,6 +74,11 @@ public class MaterialDataProvider1_13 implements MaterialDataProviderPlatform {
     }
 
     return new MaterialData1_13(blockData);
+  }
+
+  private MaterialData1_13 fromXMaterial(XMaterial xmaterial, boolean typeMatters) {
+    final Material material = parseMaterial(xmaterial);
+    return from(material, typeMatters);
   }
 
   private MaterialData1_13 from(Material material, boolean typeMatters) {
@@ -178,7 +192,7 @@ public class MaterialDataProvider1_13 implements MaterialDataProviderPlatform {
                   }
                 }
 
-                return from(material, dataMatters);
+                return fromXMaterial(xMaterial, dataMatters);
               } else {
                 return null;
               }
